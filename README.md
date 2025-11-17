@@ -8,9 +8,12 @@
 
 A production-ready machine learning project that classifies SMS messages as spam or legitimate (ham) using Logistic Regression with TF-IDF vectorization. Achieves ~97-98% accuracy on test data.
 
+**🇷🇺 NEW:** Now supports Russian language spam detection! See [RUSSIAN_QUICKSTART.md](RUSSIAN_QUICKSTART.md) for details.
+
 ## 🎯 Features
 
 - **High Performance**: ~97-98% accuracy on SMS spam detection
+- **Multilingual Support**: Works with both English and Russian messages
 - **Complete ML Pipeline**: Data preprocessing, training, evaluation, and inference
 - **Dual Interface**: Both command-line and web-based interfaces
 - **Production Ready**: Clean code, comprehensive tests, and full documentation
@@ -102,16 +105,43 @@ spam_classifier/
 │   ├── data.md            # Data documentation
 │   ├── model.md           # Model architecture
 │   ├── inference.md       # Inference API
-│   └── ui.md              # UI documentation
+│   ├── ui.md              # UI documentation
+│   └── russian_dataset.md # 🇷🇺 Russian dataset docs
 ├── data/                   # Data directory
 │   ├── raw.csv            # Original dataset
+│   ├── russian_messages.csv # 🇷🇺 Russian messages
 │   ├── train.csv          # Training set (generated)
 │   └── test.csv           # Test set (generated)
 ├── Makefile               # Automation commands
 ├── requirements.txt       # Python dependencies
 ├── setup.py               # Package configuration
+├── RUSSIAN_QUICKSTART.md  # 🇷🇺 Quick start guide
 └── README.md              # This file
 ```
+
+## 🇷🇺 Russian Language Support
+
+The project now includes a Russian language dataset for multilingual spam detection:
+
+**Quick Start with Russian:**
+```bash
+# Merge Russian messages with main dataset
+python src/merge_russian_data.py --update-raw
+
+# Retrain the model
+make all
+```
+
+**Test Russian messages:**
+```bash
+python src/predict.py "СРОЧНО! Вы выиграли iPhone!"
+# Output: spam
+
+python src/predict.py "Привет! Как дела?"
+# Output: ham
+```
+
+📚 **Full documentation**: [RUSSIAN_QUICKSTART.md](RUSSIAN_QUICKSTART.md) | [docs/russian_dataset.md](docs/russian_dataset.md)
 
 ## 🛠️ Technology Stack
 
@@ -130,6 +160,7 @@ Comprehensive documentation is available in the `/docs` directory:
 - **[Model](docs/model.md)** - Model architecture and training process
 - **[Inference](docs/inference.md)** - How to use the prediction API
 - **[UI](docs/ui.md)** - Web interface documentation
+- **[Russian Dataset](docs/russian_dataset.md)** - 🇷🇺 Russian language support
 
 ## 🧪 Testing
 

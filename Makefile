@@ -1,4 +1,4 @@
-.PHONY: all prepare train test run-ui clean help install predict test-coverage lint format docker-build docker-run
+.PHONY: all prepare train test run-ui clean help install predict test-coverage lint format docker-build docker-run russian-merge russian-train russian-test
 
 # Python command
 PYTHON = python3
@@ -22,6 +22,11 @@ help:
 	@echo "Running Commands:"
 	@echo "  make run-ui        - Start Flask web interface"
 	@echo "  make predict       - Interactive prediction mode"
+	@echo ""
+	@echo "🇷🇺 Russian Language Commands:"
+	@echo "  make russian-merge - Merge Russian dataset with main dataset"
+	@echo "  make russian-train - Full pipeline with Russian data (merge + train)"
+	@echo "  make russian-test  - Test model with Russian examples"
 	@echo ""
 	@echo "Docker Commands:"
 	@echo "  make docker-build  - Build Docker image"
@@ -137,6 +142,23 @@ docker-down:
 	@echo "==> Stopping services..."
 	docker-compose down
 	@echo "✓ Services stopped!"
+
+# 🇷🇺 Russian language support commands
+russian-merge:
+	@echo "==> 🇷🇺 Merging Russian dataset with main dataset..."
+	$(PYTHON) src/merge_russian_data.py --update-raw
+	@echo "✓ Russian data merged! Original backed up as raw_english_only.csv"
+
+russian-train: russian-merge
+	@echo "==> 🇷🇺 Training multilingual model..."
+	$(PYTHON) src/prepare.py
+	$(PYTHON) src/train.py
+	@echo "✓ Multilingual model trained!"
+
+russian-test:
+	@echo "==> 🇷🇺 Testing model with Russian examples..."
+	$(PYTHON) src/test_russian.py
+	@echo "✓ Russian test complete!"
 
 # Check project status
 status:
