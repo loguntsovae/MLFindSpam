@@ -140,20 +140,20 @@ docker-restart: docker-stop docker-build docker-run
 
 # Docker compose
 docker-up:
-	@echo "==> Starting services with docker-compose..."
-	docker-compose up -d
+	@echo "==> Starting services with docker compose..."
+	docker compose up -d
 	@echo "✓ Services started!"
 
 docker-down:
 	@echo "==> Stopping services..."
-	docker-compose down
+	docker compose down
 	@echo "✓ Services stopped!"
 
 # Docker compose rebuild
 docker-compose-rebuild:
 	@echo "==> Rebuilding and restarting services..."
-	docker-compose down
-	docker-compose up --build -d
+	docker compose down
+	docker compose up --build -d
 	@echo "✓ Services rebuilt and restarted!"
 
 # 🇷🇺 Russian language support commands
