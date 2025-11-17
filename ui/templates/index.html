@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS Spam Classifier</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+            transition: border-color 0.3s;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            display: none;
+        }
+        
+        .result.spam {
+            background: #fee;
+            border: 2px solid #fcc;
+        }
+        
+        .result.ham {
+            background: #efe;
+            border: 2px solid #cfc;
+        }
+        
+        .result.error {
+            background: #ffeaa7;
+            border: 2px solid #fdcb6e;
+        }
+        
+        .result-label {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .result.spam .result-label {
+            color: #c00;
+        }
+        
+        .result.ham .result-label {
+            color: #070;
+        }
+        
+        .result.error .result-label {
+            color: #d63031;
+        }
+        
+        .result-message {
+            color: #666;
+            font-size: 14px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .examples {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .examples h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .example-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+        
+        .example-item:hover {
+            background: #e9ecef;
+        }
+        
+        .example-label {
+            font-weight: 600;
+            margin-right: 5px;
+        }
+        
+        .example-label.spam {
+            color: #c00;
+        }
+        
+        .example-label.ham {
+            color: #070;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 SMS Spam Classifier</h1>
+        <p class="subtitle">Detect whether a message is spam or legitimate</p>
+        
+        <form id="classifierForm">
+            <div class="form-group">
+                <label for="message">Enter SMS Message:</label>
+                <textarea 
+                    id="message" 
+                    name="message" 
+                    placeholder="Example: Congratulations! You won a prize..."
+                    required
+                ></textarea>
+            </div>
+            
+            <button type="submit" id="submitBtn">Classify Message</button>
+        </form>
+        
+        <div class="result" id="result">
+            <div class="result-label" id="resultLabel"></div>
+            <div class="result-message" id="resultMessage"></div>
+        </div>
+        
+        <div class="examples">
+            <h3>Example Messages (click to test):</h3>
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label spam">SPAM:</span>
+                Congratulations! You won $1000. Call now to claim your prize!
+            </div>
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label spam">SPAM:</span>
+                FREE entry to win iPhone! Text WIN to 12345 now!
+            </div>
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label ham">HAM:</span>
+                Hey, are we still meeting for lunch at noon?
+            </div>
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label ham">HAM:</span>
+                Can you pick up some milk on your way home?
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const form = document.getElementById('classifierForm');
+        const resultDiv = document.getElementById('result');
+        const resultLabel = document.getElementById('resultLabel');
+        const resultMessage = document.getElementById('resultMessage');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageInput = document.getElementById('message');
+        
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const message = messageInput.value.trim();
+            if (!message) return;
+            
+            // Disable button during request
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Analyzing...';
+            resultDiv.style.display = 'none';
+            
+            try {
+                const response = await fetch('/classify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Show result
+                    resultDiv.className = 'result ' + data.result;
+                    resultDiv.style.display = 'block';
+                    
+                    if (data.is_spam) {
+                        resultLabel.textContent = '⚠️ SPAM';
+                        resultMessage.textContent = 'This message is classified as spam';
+                    } else {
+                        resultLabel.textContent = '✅ HAM (Not Spam)';
+                        resultMessage.textContent = 'This is a legitimate message';
+                    }
+                } else {
+                    // Show error
+                    resultDiv.className = 'result error';
+                    resultDiv.style.display = 'block';
+                    resultLabel.textContent = 'Error';
+                    resultMessage.textContent = data.error || 'An error occurred';
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.style.display = 'block';
+                resultLabel.textContent = 'Error';
+                resultMessage.textContent = 'Failed to connect to server';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Classify Message';
+            }
+        });
+        
+        function fillExample(element) {
+            const text = element.textContent.trim();
+            const message = text.substring(text.indexOf(':') + 1).trim();
+            messageInput.value = message;
+            messageInput.focus();
+        }
+    </script>
+</body>
+</html>
