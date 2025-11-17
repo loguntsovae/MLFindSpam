@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Демонстрация работы модели с русскоязычными сообщениями.
+Demonstration of the model working with Russian language messages.
 
-Этот скрипт показывает примеры классификации русских SMS на спам и ham.
+This script shows examples of classifying Russian SMS messages as spam and ham.
 """
 
 import sys
@@ -14,50 +14,50 @@ from src.predict import predict_message, predict_proba
 
 
 def print_header(text):
-    """Красивый заголовок"""
+    """Print a formatted header"""
     print("\n" + "=" * 70)
     print(f"  {text}")
     print("=" * 70)
 
 
 def test_message(message, expected=None):
-    """Тестирует сообщение и выводит результат"""
+    """Test a message and display the result"""
     result = predict_message(message)
     proba = predict_proba(message)
     
-    # Определяем эмодзи
+    # Choose emoji
     emoji = "❌" if result == "spam" else "✅"
     
-    # Цветовое выделение результата
+    # Format result with color
     result_str = f"{emoji} {result.upper()}"
     
-    print(f"\n📱 Сообщение: \"{message}\"")
-    print(f"   Результат: {result_str}")
-    print(f"   Вероятности: HAM={proba['ham']:.2%}, SPAM={proba['spam']:.2%}")
+    print(f"\n📱 Message: \"{message}\"")
+    print(f"   Result: {result_str}")
+    print(f"   Probabilities: HAM={proba['ham']:.2%}, SPAM={proba['spam']:.2%}")
     
     if expected:
         match = "✓" if result == expected else "✗"
-        print(f"   Ожидалось: {expected.upper()} {match}")
+        print(f"   Expected: {expected.upper()} {match}")
 
 
 def main():
-    print_header("🇷🇺 ТЕСТИРОВАНИЕ МОДЕЛИ НА РУССКОМ ЯЗЫКЕ")
+    print_header("🇷🇺 RUSSIAN LANGUAGE MODEL TESTING")
     
-    print("\n📝 Этот скрипт демонстрирует работу модели с русскоязычными сообщениями.")
-    print("   Убедитесь что модель обучена на многоязычном датасете!")
+    print("\n📝 This script demonstrates the model working with Russian language messages.")
+    print("   Make sure the model is trained on the multilingual dataset!")
     
-    # Проверяем наличие модели
+    # Check if model exists
     model_path = Path(__file__).parent.parent / "models" / "model.pkl"
     if not model_path.exists():
-        print("\n⚠️  ВНИМАНИЕ: Модель не найдена!")
-        print("   Сначала обучите модель:")
+        print("\n⚠️  WARNING: Model not found!")
+        print("   First, train the model:")
         print("   1. python src/merge_russian_data.py --update-raw")
         print("   2. python src/prepare.py")
-        print("   3. python src/train.py")
+        print("   3. python src/train_enhanced.py")
         return
     
-    # HAM примеры
-    print_header("✅ ПРИМЕРЫ HAM (ЛЕГИТИМНЫХ СООБЩЕНИЙ)")
+    # HAM examples
+    print_header("✅ HAM EXAMPLES (LEGITIMATE MESSAGES)")
     
     ham_examples = [
         "Привет! Как дела? Когда встретимся?",
@@ -71,8 +71,8 @@ def main():
     for msg in ham_examples:
         test_message(msg, expected="ham")
     
-    # SPAM примеры
-    print_header("❌ ПРИМЕРЫ SPAM (МОШЕННИЧЕСКИХ СООБЩЕНИЙ)")
+    # SPAM examples
+    print_header("❌ SPAM EXAMPLES (FRAUDULENT MESSAGES)")
     
     spam_examples = [
         "СРОЧНО! Вы выиграли iPhone 15 Pro! Для получения приза перейдите по ссылке",
@@ -86,8 +86,8 @@ def main():
     for msg in spam_examples:
         test_message(msg, expected="spam")
     
-    # Граничные случаи
-    print_header("⚠️  ГРАНИЧНЫЕ СЛУЧАИ")
+    # Edge cases
+    print_header("⚠️  EDGE CASES")
     
     edge_cases = [
         "Акция! Скидка 20% по промокоду SUMMER2024 в нашем магазине",
@@ -99,16 +99,16 @@ def main():
     for msg in edge_cases:
         test_message(msg)
     
-    # Интерактивный режим
-    print_header("🎮 ИНТЕРАКТИВНЫЙ РЕЖИМ")
-    print("\nВведите свое сообщение для проверки (или 'exit' для выхода):")
+    # Interactive mode
+    print_header("🎮 INTERACTIVE MODE")
+    print("\nEnter your message to test (or 'exit' to quit):")
     
     while True:
         try:
             user_input = input("\n📱 > ").strip()
             
-            if user_input.lower() in ['exit', 'quit', 'выход']:
-                print("\n👋 До свидания!")
+            if user_input.lower() in ['exit', 'quit']:
+                print("\n👋 Goodbye!")
                 break
             
             if not user_input:
@@ -117,23 +117,23 @@ def main():
             test_message(user_input)
             
         except KeyboardInterrupt:
-            print("\n\n👋 До свидания!")
+            print("\n\n👋 Goodbye!")
             break
         except Exception as e:
-            print(f"\n❌ Ошибка: {e}")
+            print(f"\n❌ Error: {e}")
     
-    print_header("✨ ТЕСТИРОВАНИЕ ЗАВЕРШЕНО")
-    print("\n💡 Советы:")
-    print("   • Для улучшения качества добавьте больше примеров в russian_messages.csv")
-    print("   • Переобучите модель после добавления новых данных")
-    print("   • Используйте веб-интерфейс: python ui/app.py")
+    print_header("✨ TESTING COMPLETE")
+    print("\n💡 Tips:")
+    print("   • To improve quality, add more examples to russian_messages.csv")
+    print("   • Retrain the model after adding new data")
+    print("   • Use the web interface: python ui/app.py")
 
 
 if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        print(f"\n❌ Критическая ошибка: {e}")
+        print(f"\n❌ Critical error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

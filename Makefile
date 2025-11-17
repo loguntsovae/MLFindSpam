@@ -165,7 +165,7 @@ russian-merge:
 russian-train: russian-merge
 	@echo "==> 🇷🇺 Training multilingual model..."
 	$(PYTHON) src/prepare.py
-	$(PYTHON) src/train.py
+	$(PYTHON) src/train_enhanced.py
 	@echo "✓ Multilingual model trained!"
 
 russian-test:
