@@ -25,8 +25,9 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 # Copy project files
 COPY . .
 
-# Create necessary directories
-RUN mkdir -p data models
+# Create necessary directories and clean up any conflicting files
+RUN mkdir -p data models && \
+    rm -rf model.pkl 2>/dev/null || true
 
 # Train the model (or copy pre-trained model)
 # Comment out if you want to train on container start instead
