@@ -32,7 +32,11 @@ def prepare_data(input_path='data/raw.csv', output_dir='data'):
     
     # Load the dataset
     # SMS Spam Collection format: v1 (label), v2 (message)
-    df = pd.read_csv(input_path, encoding='latin-1')
+    # Try UTF-8 first (for multilingual datasets), fallback to latin-1
+    try:
+        df = pd.read_csv(input_path, encoding='utf-8')
+    except UnicodeDecodeError:
+        df = pd.read_csv(input_path, encoding='latin-1')
     
     # Keep only relevant columns
     df = df[['v1', 'v2']]
