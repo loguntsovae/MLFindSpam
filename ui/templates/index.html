@@ -241,6 +241,9 @@
         const submitBtn = document.getElementById('submitBtn');
         const messageInput = document.getElementById('message');
         
+        // Автоматически определяем базовый путь из текущего URL
+        const basePath = window.location.pathname.replace(/\/$/, '');
+        
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -253,7 +256,7 @@
             resultDiv.style.display = 'none';
             
             try {
-                const response = await fetch('/classify', {
+                const response = await fetch(`${basePath}/classify`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
