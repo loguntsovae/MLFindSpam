@@ -5,7 +5,6 @@ Loads trained model and classifies text from stdin or command line.
 
 import pickle
 import sys
-import re
 
 
 def load_model(model_path='model.pkl'):

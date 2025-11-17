@@ -8,7 +8,6 @@
 import sys
 from pathlib import Path
 
-# Добавляем путь к модулям проекта
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.predict import predict_message, predict_proba

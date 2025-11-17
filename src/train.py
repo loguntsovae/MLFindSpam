@@ -8,7 +8,6 @@ import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
-import os
 
 
 def train_model(train_path='data/train.csv', test_path='data/test.csv', 

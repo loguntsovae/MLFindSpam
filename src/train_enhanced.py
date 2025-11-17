@@ -4,6 +4,8 @@ Trains a LogisticRegression model with TF-IDF vectorization and custom features.
 Optimized for multilingual spam detection (English + Russian).
 """
 
+import sys
+from pathlib import Path
 import pandas as pd
 import pickle
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -11,11 +13,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.preprocessing import StandardScaler
-import os
-import numpy as np
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Import custom feature extractor
-from feature_extractor import SpamFeatureExtractor
+from src.feature_extractor import SpamFeatureExtractor
 
 
 def train_model(train_path='data/train.csv', test_path='data/test.csv', 
