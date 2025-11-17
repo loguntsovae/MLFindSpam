@@ -1,4 +1,4 @@
-.PHONY: all prepare train test run-ui clean help install predict test-coverage lint format docker-build docker-run russian-merge russian-train russian-test
+.PHONY: all prepare train test run-ui clean help install predict test-coverage lint format docker-build docker-run docker-stop docker-restart docker-up docker-down docker-compose-rebuild russian-merge russian-train russian-test
 
 # Python command
 PYTHON = python3
@@ -32,6 +32,8 @@ help:
 	@echo "  make docker-build  - Build Docker image"
 	@echo "  make docker-run    - Run Docker container"
 	@echo "  make docker-stop   - Stop Docker container"
+	@echo "  make docker-restart - Rebuild and restart container"
+	@echo "  make docker-compose-rebuild - Rebuild with docker-compose"
 	@echo ""
 	@echo "Utility Commands:"
 	@echo "  make clean         - Remove generated files (model, data splits)"
@@ -132,6 +134,10 @@ docker-stop:
 	docker rm spam_classifier || true
 	@echo "✓ Container stopped!"
 
+# Docker rebuild and restart
+docker-restart: docker-stop docker-build docker-run
+	@echo "✓ Container rebuilt and restarted!"
+
 # Docker compose
 docker-up:
 	@echo "==> Starting services with docker-compose..."
@@ -142,6 +148,13 @@ docker-down:
 	@echo "==> Stopping services..."
 	docker-compose down
 	@echo "✓ Services stopped!"
+
+# Docker compose rebuild
+docker-compose-rebuild:
+	@echo "==> Rebuilding and restarting services..."
+	docker-compose down
+	docker-compose up --build -d
+	@echo "✓ Services rebuilt and restarted!"
 
 # 🇷🇺 Russian language support commands
 russian-merge:
