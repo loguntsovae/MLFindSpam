@@ -191,20 +191,20 @@
 <body>
     <div class="container">
         <h1>📱 SMS Spam Classifier</h1>
-        <p class="subtitle">Detect whether a message is spam or legitimate</p>
+        <p class="subtitle">🇬🇧 Detect whether a message is spam or legitimate | 🇷🇺 Определение спама в сообщениях</p>
         
         <form id="classifierForm">
             <div class="form-group">
-                <label for="message">Enter SMS Message:</label>
+                <label for="message">Enter SMS Message / Введите SMS:</label>
                 <textarea 
                     id="message" 
                     name="message" 
-                    placeholder="Example: Congratulations! You won a prize..."
+                    placeholder="Example: Congratulations! You won a prize... | Пример: СРОЧНО! Вы выиграли приз..."
                     required
                 ></textarea>
             </div>
             
-            <button type="submit" id="submitBtn">Classify Message</button>
+            <button type="submit" id="submitBtn">🔍 Classify Message / Проверить сообщение</button>
         </form>
         
         <div class="result" id="result">
@@ -213,22 +213,46 @@
         </div>
         
         <div class="examples">
-            <h3>Example Messages (click to test):</h3>
+            <h3>Example Messages (click to test) / Примеры сообщений (нажмите для теста):</h3>
+            
+            <!-- English SPAM -->
             <div class="example-item" onclick="fillExample(this)">
-                <span class="example-label spam">SPAM:</span>
+                <span class="example-label spam">🇬🇧 SPAM:</span>
                 Congratulations! You won $1000. Call now to claim your prize!
             </div>
             <div class="example-item" onclick="fillExample(this)">
-                <span class="example-label spam">SPAM:</span>
+                <span class="example-label spam">🇬🇧 SPAM:</span>
                 FREE entry to win iPhone! Text WIN to 12345 now!
             </div>
+            
+            <!-- Russian SPAM -->
             <div class="example-item" onclick="fillExample(this)">
-                <span class="example-label ham">HAM:</span>
+                <span class="example-label spam">🇷🇺 СПАМ:</span>
+                СРОЧНО! Вы выиграли iPhone 15 Pro! Получите приз по ссылке!
+            </div>
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label spam">🇷🇺 СПАМ:</span>
+                ВНИМАНИЕ! Ваша карта заблокирована! Позвоните 8-800-XXX-XXXX
+            </div>
+            
+            <!-- English HAM -->
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label ham">🇬🇧 HAM:</span>
                 Hey, are we still meeting for lunch at noon?
             </div>
             <div class="example-item" onclick="fillExample(this)">
-                <span class="example-label ham">HAM:</span>
+                <span class="example-label ham">🇬🇧 HAM:</span>
                 Can you pick up some milk on your way home?
+            </div>
+            
+            <!-- Russian HAM -->
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label ham">🇷🇺 НЕ СПАМ:</span>
+                Привет! Как дела? Когда встретимся?
+            </div>
+            <div class="example-item" onclick="fillExample(this)">
+                <span class="example-label ham">🇷🇺 НЕ СПАМ:</span>
+                Встреча перенесена на пятницу в 15:00, не опаздывай
             </div>
         </div>
     </div>
