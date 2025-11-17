@@ -8,14 +8,6 @@ import sys
 import re
 
 
-def clean_text(text):
-    """Clean and normalize text data (same as in prepare.py)."""
-    text = text.lower()
-    text = re.sub(r'http\S+|www\S+|https\S+', '', text, flags=re.MULTILINE)
-    text = re.sub(r'\s+', ' ', text).strip()
-    return text
-
-
 def load_model(model_path='model.pkl'):
     """Load the trained model and vectorizer."""
     with open(model_path, 'rb') as f:
@@ -37,14 +29,11 @@ def predict(text, model_path='model.pkl'):
     # Load model
     model, vectorizer = load_model(model_path)
     
-    # Clean text
-    cleaned_text = clean_text(text)
-    
-    # Transform text
-    text_tfidf = vectorizer.transform([cleaned_text])
+    # Transform text (no cleaning - features are important!)
+    text_features = vectorizer.transform([text])
     
     # Predict
-    prediction = model.predict(text_tfidf)[0]
+    prediction = model.predict(text_features)[0]
     
     return prediction
 

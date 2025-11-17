@@ -29,9 +29,9 @@ COPY . .
 RUN mkdir -p data models && \
     rm -rf model.pkl 2>/dev/null || true
 
-# Train the model (or copy pre-trained model)
+# Train the model with enhanced multilingual support
 # Comment out if you want to train on container start instead
-RUN python src/prepare.py && python src/train.py
+RUN python src/prepare.py && python src/train_enhanced.py
 
 # Expose port
 EXPOSE 5001

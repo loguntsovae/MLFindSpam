@@ -34,13 +34,15 @@ def train_model(train_path='data/train.csv', test_path='data/test.csv',
     y_test = test_df['label']
     
     print("\nTraining TF-IDF Vectorizer...")
-    # Initialize TF-IDF Vectorizer
+    # Initialize TF-IDF Vectorizer with multilingual support
     vectorizer = TfidfVectorizer(
-        max_features=3000,
-        min_df=2,
-        max_df=0.8,
-        ngram_range=(1, 2),
-        stop_words='english'
+        max_features=5000,  # Increased for multilingual
+        min_df=1,  # More flexible for smaller Russian dataset
+        max_df=0.85,
+        ngram_range=(1, 3),  # Tri-grams for better pattern detection
+        analyzer='char_wb',  # Character n-grams work better for Russian
+        lowercase=True,
+        # Removed stop_words to support both languages
     )
     
     # Fit and transform training data
@@ -50,12 +52,14 @@ def train_model(train_path='data/train.csv', test_path='data/test.csv',
     print(f"Feature matrix shape: {X_train_tfidf.shape}")
     
     print("\nTraining Logistic Regression model...")
-    # Train Logistic Regression
+    # Train Logistic Regression with optimized parameters
     model = LogisticRegression(
-        max_iter=1000,
+        max_iter=2000,  # Increased iterations
         random_state=42,
-        C=1.0,
-        solver='liblinear'
+        C=0.5,  # Regularization for better generalization
+        solver='saga',  # Better for large datasets and multilingual
+        class_weight='balanced',  # Handle class imbalance
+        penalty='l2'
     )
     
     model.fit(X_train_tfidf, y_train)

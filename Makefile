@@ -57,7 +57,7 @@ prepare:
 # Train the model
 train:
 	@echo "==> Training model..."
-	$(PYTHON) src/train.py
+	$(PYTHON) src/train_enhanced.py
 	@echo "✓ Model training complete!"
 
 # Run tests
