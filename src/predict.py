@@ -6,6 +6,8 @@ Loads trained model and classifies text from stdin or command line.
 import pickle
 import sys
 
+from src.prepare import clean_text
+
 
 def load_model(model_path='model.pkl'):
     """Load the trained model and vectorizer."""
@@ -27,9 +29,10 @@ def predict(text, model_path='model.pkl'):
     """
     # Load model
     model, vectorizer = load_model(model_path)
-    
-    # Transform text (no cleaning - features are important!)
-    text_features = vectorizer.transform([text])
+
+    # Apply the same preprocessing as training — otherwise the vectorizer
+    # sees raw text while it was fitted on cleaned text (silent skew)
+    text_features = vectorizer.transform([clean_text(text)])
     
     # Predict
     prediction = model.predict(text_features)[0]
